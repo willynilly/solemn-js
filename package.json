@@ -11,14 +11,21 @@
         "censorship",
         "profanity",
         "tone",
-        "static analysis",
+        "static analysis"
     ],
-    "author": "will.riley@slalom.com",
+    "author": "Will Riley",
     "license": "MIT",
     "dependencies": {
         "esprima": "^2.7.2",
         "estraverse": "^4.2.0",
         "lodash": "^4.12.0",
         "profanity-util": "0.0.5"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/willynilly/solemn-js.git"
+    },
+    "engines": {
+        "node": "*"
     }
 }

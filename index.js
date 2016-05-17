@@ -4,11 +4,16 @@ var estraverse = require('estraverse');
 var _ = require('lodash');
 var profanity = require('profanity-util');
 
-var filename = 'test.js'; //process.argv[2];
+if (process.argv[2]) {
+    main();
+}
 
-var codeTexts = parseCodeTexts(filename);
-codeTexts = detectProfanity(codeTexts);
-reportProfanity(filename, codeTexts);
+function main() {
+    var filename = process.argv[2];
+    var codeTexts = parseCodeTexts(filename);
+    codeTexts = detectProfanity(codeTexts);
+    reportProfanityViolations(filename, codeTexts);
+}
 
 function addNewElementsToArray(oldArray, elements) {
     _.forEach(elements, function(e) {
@@ -63,31 +68,43 @@ function detectProfanity(codeTexts) {
     return codeTexts;
 }
 
-function reportProfanity(filename, codeTexts) {
-    var violations = [];
-    _.forEach(codeTexts.identifiers, function(identifer) {
-        if (identifer.profanewords.length) {
-            var v = 'VIOLATION (issue: profanity, type: identifier, line: ' + identifer.loc.start.line + ' col: ' + identifer.loc.start.column + ') = ' + identifer.name.trim();
-            violations.push(v);
-        }
-    });
-    _.forEach(codeTexts.literals, function(literal) {
-        if (literal.profanewords.length) {
-            var v = 'VIOLATION (issue: profanity, type: literal, line: ' + literal.loc.start.line + ' col: ' + literal.loc.start.column + ') = ' + (literal.value + '').trim();
-            violations.push(v);
-        }
-    });
-    _.forEach(codeTexts.comments, function(comment) {
-        if (comment.profanewords.length) {
-            var v = 'VIOLATION (issue: profanity, type: comment, line: ' + comment.loc.start.line + ' col: ' + comment.loc.start.column + ') = ' + comment.value.trim();
-            violations.push(v);
-        }
-    });
+function reportProfanityViolations(fileName, codeTexts) {
+    var violations = getProfanityViolations(fileName, codeTexts);
     if (violations.length) {
         _.forEach(violations, function(v) {
             console.log(v);
         });
     } else {
-        console.log('SUCCESS: No profanity found in ' + filename);
+        console.log('SUCCESS: No profanity found in ' + fileName);
     }
 }
+
+function getProfanityViolations(fileName, codeTexts) {
+    var violations = [];
+    _.forEach(codeTexts.identifiers, function(identifer) {
+        if (identifer.profanewords.length) {
+            var v = 'VIOLATION (issue: profanity, type: identifier, file: ' + fileName + ', line: ' + identifer.loc.start.line + ' col: ' + identifer.loc.start.column + ') = ' + identifer.name.trim();
+            violations.push(v);
+        }
+    });
+    _.forEach(codeTexts.literals, function(literal) {
+        if (literal.profanewords.length) {
+            var v = 'VIOLATION (issue: profanity, type: literal, file: ' + fileName + ', line: ' + literal.loc.start.line + ' col: ' + literal.loc.start.column + ') = ' + (literal.value + '').trim();
+            violations.push(v);
+        }
+    });
+    _.forEach(codeTexts.comments, function(comment) {
+        if (comment.profanewords.length) {
+            var v = 'VIOLATION (issue: profanity, type: comment, file: ' + fileName + ', line: ' + comment.loc.start.line + ' col: ' + comment.loc.start.column + ') = ' + comment.value.trim();
+            violations.push(v);
+        }
+    });
+    return violations;
+}
+
+module.exports = {
+    parseCodeTexts: parseCodeTexts,
+    detectProfanity: detectProfanity,
+    reportProfanityViolations: reportProfanityViolations,
+    getProfanityViolations: getProfanityViolations,
+};
