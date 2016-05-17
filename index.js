@@ -79,23 +79,29 @@ function reportProfanityViolations(fileName, codeTexts) {
     }
 }
 
+function createProfanityViolation(codeTextType, fileName, loc, text) {
+    text = text + '';
+    var v = 'VIOLATION (issue: profanity, type: ' + codeTextType + ', file: ' + fileName + ', line: ' + loc.start.line + ' col: ' + loc.start.column + ') = ' + text.trim();
+    return v;
+}
+
 function getProfanityViolations(fileName, codeTexts) {
     var violations = [];
     _.forEach(codeTexts.identifiers, function(identifer) {
         if (identifer.profanewords.length) {
-            var v = 'VIOLATION (issue: profanity, type: identifier, file: ' + fileName + ', line: ' + identifer.loc.start.line + ' col: ' + identifer.loc.start.column + ') = ' + identifer.name.trim();
+            var v = createProfanityViolation('identifer', fileName, identifer.loc, identifer.name);
             violations.push(v);
         }
     });
     _.forEach(codeTexts.literals, function(literal) {
         if (literal.profanewords.length) {
-            var v = 'VIOLATION (issue: profanity, type: literal, file: ' + fileName + ', line: ' + literal.loc.start.line + ' col: ' + literal.loc.start.column + ') = ' + (literal.value + '').trim();
+            var v = createProfanityViolation('literal', fileName, literal.loc, literal.value);
             violations.push(v);
         }
     });
     _.forEach(codeTexts.comments, function(comment) {
         if (comment.profanewords.length) {
-            var v = 'VIOLATION (issue: profanity, type: comment, file: ' + fileName + ', line: ' + comment.loc.start.line + ' col: ' + comment.loc.start.column + ') = ' + comment.value.trim();
+            var v = createProfanityViolation('comment', fileName, comment.loc, comment.value);
             violations.push(v);
         }
     });
