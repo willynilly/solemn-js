@@ -1,5 +1,5 @@
 {
-    "name": "solemn",
+    "name": "solemn-js",
     "version": "1.0.0",
     "description": "Reports inappropriate language in your JS code.",
     "main": "index.js",
@@ -10,7 +10,6 @@
         "coding",
         "censorship",
         "profanity",
-        "tone",
         "static analysis"
     ],
     "author": "Will Riley",
