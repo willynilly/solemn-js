@@ -1,0 +1,24 @@
+{
+    "name": "solemn",
+    "version": "1.0.0",
+    "description": "Reports inappropriate language in your JS code.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "coding",
+        "censorship",
+        "profanity",
+        "tone",
+        "static analysis",
+    ],
+    "author": "will.riley@slalom.com",
+    "license": "MIT",
+    "dependencies": {
+        "esprima": "^2.7.2",
+        "estraverse": "^4.2.0",
+        "lodash": "^4.12.0",
+        "profanity-util": "0.0.5"
+    }
+}
