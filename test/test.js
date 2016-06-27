@@ -1,4 +1,4 @@
-var SolemnJS = require('solemn-js');
+var SolemnJS = require('../lib/solemn-js');
 var Profane = require('Profane');
 var _ = require('lodash');
 
